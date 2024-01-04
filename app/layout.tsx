@@ -18,14 +18,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
       <AuthProvider>
-        <Navbar/>
-        <div className="flex flex-col p-4 md:p-12 h-[100vh]">
-          {children}
-        </div>
+        <body className={inter.className + ' min-h-dvh'}>
+            <Navbar/>
+            <div className="flex flex-col justify-between px-5 min-h-[90vh]">
+              {children}
+            </div>
+        </body>
       </AuthProvider>
-      </body>
     </html>
   )
 }

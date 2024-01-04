@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+html, body {
+  height: 100%;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -72,7 +74,5 @@
   }
   body {
     @apply bg-background text-foreground;
-    min-height: 100vh;
-    min-width: 100vw;
   }
 }
