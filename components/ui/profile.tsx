@@ -1,7 +1,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
-import { NavigationMenuContent, NavigationMenuLink, NavigationMenuTrigger, navigationMenuTriggerStyle } from "./ui/navigation-menu";
-import { Avatar, AvatarImage } from "./ui/avatar";
-import { Skeleton } from "./ui/skeleton";
+import { NavigationMenuContent, NavigationMenuLink, NavigationMenuTrigger, navigationMenuTriggerStyle } from "./navigation-menu";
+import { Avatar, AvatarImage } from "./avatar";
+import { Skeleton } from "./skeleton";
 
 export default function Profile() {
   const {data, status} = useSession();

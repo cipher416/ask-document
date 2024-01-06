@@ -1,10 +1,10 @@
 'use client'; 
-import { Avatar } from "./ui/avatar";
-import { AvatarImage } from "./ui/avatar";
+import { Avatar } from "./avatar";
+import { AvatarImage } from "./avatar";
 
 import type { Message } from "ai/react";
 import { useSession } from "next-auth/react";
-import { Separator } from "./ui/separator";
+import { Separator } from "./separator";
 
 type ChatBubbleProps = {
   message: Message | null
