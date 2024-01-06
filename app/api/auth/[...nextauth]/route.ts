@@ -1,8 +1,10 @@
+import prisma from "@/lib/db";
 import NextAuth, { NextAuthOptions } from "next-auth"
 import Auth0Provider from "next-auth/providers/auth0";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 export const authOptions = {
-  // Configure one or more authentication providers
+  adapter: PrismaAdapter(prisma), 
   providers: [
     Auth0Provider({
       clientId: process.env.AUTH0_CLIENT_ID!,
@@ -10,6 +12,12 @@ export const authOptions = {
       issuer: process.env.AUTH0_ISSUER!,
     }),
   ],
+  callbacks: {
+    async session({session, token, user}) {
+        session.user!.id = user.id;
+        return Promise.resolve(session)
+    },
+  }
 } satisfies NextAuthOptions
 
 const handler = NextAuth(authOptions);

@@ -5,7 +5,6 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Controller, useForm } from "react-hook-form";
-
 type FormInputData = {
   fileName: string
   file: File
@@ -14,11 +13,11 @@ type FormInputData = {
 export default function Home() {
   const form = useForm<FormInputData>();
 
-  function onSubmit(values:FormInputData) {
+  async function onSubmit(values:FormInputData) {
     const formData = new FormData();
     formData.append("file", values.file);
     formData.append("fileName", values.fileName);
-    const result = fetch('/api/upload-document', {
+    const result = await fetch('/api/upload-document', {
       method: "POST",
       body: formData,
       cache: "no-cache",

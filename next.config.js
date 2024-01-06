@@ -8,6 +8,9 @@ const nextConfig = {
         port: '',
       },
     ],
+  },
+  experimental: {
+    serverComponentsExternalPackages: ['@langchain/core','pdf-text-reader'],
   }
 }
 
