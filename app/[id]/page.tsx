@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input'
 import { SendHorizontal } from 'lucide-react'
 import { useChat } from 'ai/react';
 import ChatService from '@/services/ChatService';
-import { useEffect, useState } from 'react';
 import {Message} from 'ai/react'
 
 export default function Chat({ params }: { params: { id: string } }) {
