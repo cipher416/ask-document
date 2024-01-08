@@ -1,15 +1,15 @@
 import { getServerSession } from "next-auth"
-import { authOptions } from "../auth/[...nextauth]/route"
+import { authOptions } from "../../auth/[...nextauth]/route"
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { Document } from "langchain/document";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import prisma from "@/lib/db";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
 import {readPdfText} from 'pdf-text-reader';
 import {  createClient } from "@supabase/supabase-js";
+import { redirect } from "next/navigation";
 export async function POST(request: Request) {
   
   const session = await getServerSession(authOptions);
@@ -42,7 +42,6 @@ export async function POST(request: Request) {
 			documentName : userDocument.name,
 		}}),]);
 
-		console.log(splitDocuments[0].metadata);
 		const supabaseClient = createClient(
 			process.env.SUPABASE_URL!,
       process.env.SUPABASE_PRIVATE_KEY!,
@@ -52,14 +51,13 @@ export async function POST(request: Request) {
       new OpenAIEmbeddings(),
       {
         client: supabaseClient,
-        tableName: "Document",
+        tableName: "document",
         queryName: "match_documents",
       },
     );
-	
-		return Response.redirect(`/${userDocument.id}`);
-  }
 
-  
-  return Response.json({message: 'success' })
+		return Response.json({
+      documentId: userDocument.id
+    });
+  }
 }

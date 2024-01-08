@@ -2,11 +2,29 @@
 
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "./navigation-menu";
 import Profile from "./profile";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./select";
+import DocumentService from "@/services/DocumentService";
+import { UserDocuments } from "@prisma/client";
+import { useRouter } from "next/navigation";
+
+function DocumentDropdownData() {
+  const [documents, setDocuments] = useState<UserDocuments[]>([]);
+  useEffect(()=> {
+    DocumentService.getAllDocuments().then((results)=> {
+      setDocuments(results);
+    });
+  }, [])
+  return (
+    documents.length != 0 ? documents.map((document)=> {
+      return <SelectItem value={document.id} key={document.id}>{document.name}</SelectItem>
+    }) : <></>
+  );
+}
 
 export default function Navbar() {
+  const router = useRouter();
   return (
     <div className="flex flex-row justify-between p-5 mx-10 h-fit">
       <div className="flex space-x-10 items-center">
@@ -14,14 +32,14 @@ export default function Navbar() {
           ask-document
         </h1>
         <Select defaultValue="" onValueChange={(value) => {
-              console.log(value)
+              router.push(`/${value}`);
             }}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a fruit" />
+                <SelectValue placeholder="Select a document" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="apple">Apple</SelectItem>
+                  <DocumentDropdownData/>
                 </SelectGroup>
               </SelectContent>
             </Select>

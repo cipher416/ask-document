@@ -15,7 +15,7 @@ export const authOptions = {
   callbacks: {
     async session({session, token, user}) {
         session.user!.id = user.id;
-        return Promise.resolve(session)
+        return Promise.resolve(session);
     },
   }
 } satisfies NextAuthOptions

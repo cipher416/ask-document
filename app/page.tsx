@@ -4,25 +4,21 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import DocumentService from "@/services/DocumentService";
+import { FormInputData } from "@/types/types";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
-type FormInputData = {
-  fileName: string
-  file: File
-}
 
 export default function Home() {
+  const router = useRouter();
   const form = useForm<FormInputData>();
 
   async function onSubmit(values:FormInputData) {
-    const formData = new FormData();
-    formData.append("file", values.file);
-    formData.append("fileName", values.fileName);
-    const result = await fetch('/api/upload-document', {
-      method: "POST",
-      body: formData,
-      cache: "no-cache",
-    });
+    const result = await DocumentService.ingestDocument(values);
+    router.push(`/${result}`);
   }
+  
   return (
     <div className='grid content-center'>
       <Form {...form}>
