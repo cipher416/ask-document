@@ -6,19 +6,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import DocumentService from "@/services/DocumentService";
 import { FormInputData } from "@/types/types";
+import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 
 export default function Home() {
   const router = useRouter();
+  const {status} = useSession();
   const form = useForm<FormInputData>();
 
   async function onSubmit(values:FormInputData) {
     const result = await DocumentService.ingestDocument(values);
     router.push(`/${result}`);
   }
-  
+
   return (
     <div className='grid content-center'>
       <Form {...form}>
@@ -44,7 +46,7 @@ export default function Home() {
             control={form.control}
             render={({ field: { value, onChange, ...field } }) => (
               <FormItem>
-                  <FormLabel htmlFor="picture">Picture</FormLabel>
+                  <FormLabel htmlFor="picture">Document</FormLabel>
                   <FormControl>
                     <Input id="picture" type="file" accept="application/pdf" {...field} onChange={(event) => {
                     if (!event.target.files) return;
@@ -57,7 +59,7 @@ export default function Home() {
               </FormItem>
           )}/>
           </div>
-          <Button type="submit">
+          <Button type="submit" disabled={status !== 'authenticated'} >
             Submit
           </Button>
         </form>

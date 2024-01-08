@@ -25,7 +25,7 @@ async function GET(request: Request, { params }: { params: { id: string } }) {
       }
     }, 
     orderBy : {
-      insertedDate: 'desc'
+      insertedDate: 'asc'
     }
   });
   return Response.json({chats});

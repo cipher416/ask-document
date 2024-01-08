@@ -15,14 +15,13 @@ export default function Chat({ params }: { params: { id: string } }) {
       console.log(response);
     },
   });
+  ChatService.getAllChats(params.id).then((result: Message[]) => {
+    setMessages(result);
+  });
 
-  useEffect(()=> {
-    ChatService.getAllChats(params.id).then((result: Message[]) => {
-      setMessages(result);
-    });
-  }, []);
 
   return (
+    
     <div className='flex flex-col justify-center items-center space-y-2'>
       <div className='flex flex-col p-10 space-y-2 overflow-y-scroll w-4/5 h-[80dvh] '>
         {

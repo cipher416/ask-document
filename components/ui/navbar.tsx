@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import DocumentService from "@/services/DocumentService";
 import { UserDocuments } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 function DocumentDropdownData() {
   const [documents, setDocuments] = useState<UserDocuments[]>([]);
@@ -25,24 +26,31 @@ function DocumentDropdownData() {
 
 export default function Navbar() {
   const router = useRouter();
+  const {status} = useSession();
   return (
     <div className="flex flex-row justify-between p-5 mx-10 h-fit">
       <div className="flex space-x-10 items-center">
         <h1 className="font-extrabold">
-          ask-document
+          <a href="/">
+            ask-document
+          </a>
         </h1>
-        <Select defaultValue="" onValueChange={(value) => {
-              router.push(`/${value}`);
-            }}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a document" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <DocumentDropdownData/>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+        {
+          status === 'authenticated' ?
+          <Select defaultValue='' onValueChange={(value) => {
+            router.push(`/${value}`);
+          }}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select a document" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <DocumentDropdownData/>
+              </SelectGroup>
+            </SelectContent>
+          </Select> : <></>
+        }
+        
       </div>
       <NavigationMenu>
         <NavigationMenuList>
