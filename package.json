@@ -35,6 +35,7 @@
     "pdf-parse": "^1.1.1",
     "pdf-text-reader": "^4.0.1",
     "pdf2json": "^3.0.5",
+    "pdfjs-dist": "^4.0.379",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.49.2",
