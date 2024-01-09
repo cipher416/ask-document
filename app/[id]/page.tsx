@@ -7,6 +7,7 @@ import { SendHorizontal } from 'lucide-react'
 import { useChat } from 'ai/react';
 import ChatService from '@/services/ChatService';
 import {Message} from 'ai/react'
+import { useEffect } from 'react';
 
 export default function Chat({ params }: { params: { id: string } }) {
   const { messages, input, handleInputChange, handleSubmit, setMessages} = useChat({api: `/api/chat/${params.id}`,
@@ -14,13 +15,13 @@ export default function Chat({ params }: { params: { id: string } }) {
       console.log(response);
     },
   });
-  ChatService.getAllChats(params.id).then((result: Message[]) => {
-    setMessages(result);
-  });
-
+  useEffect(() => {
+    ChatService.getAllChats(params.id).then((result: Message[]) => {
+      setMessages(result);
+    });
+  }, [params.id, setMessages])
 
   return (
-    
     <div className='flex flex-col justify-center items-center space-y-2'>
       <div className='flex flex-col p-10 space-y-2 overflow-y-scroll w-4/5 h-[80dvh] '>
         {

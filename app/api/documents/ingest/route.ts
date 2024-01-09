@@ -3,18 +3,15 @@ import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase"
 import { Document } from "@langchain/core/documents";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import prisma from "@/lib/db";
-
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { promises as fs } from 'fs';
 import {readPdfText}from 'pdf-text-reader';
-import {  createClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import { tmpdir } from 'os';
 import { authOptions } from "@/lib/options";
+
 export async function POST(request: Request) {
-  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.js");
-  pdfjs.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.550/pdf.worker.js";
   const session = await getServerSession(authOptions);
-	console.log(session);
   const formData = await request.formData();
   const file = formData.get("file");
 	const fileName = formData.get("fileName")!.toString();
