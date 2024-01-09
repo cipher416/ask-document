@@ -10,7 +10,7 @@ const nextConfig = {
     ],
   },
   experimental: {
-    serverComponentsExternalPackages: ['@langchain/core','pdf-text-reader', 'pdfjs-dist'],
+    serverComponentsExternalPackages: ['pdf-text-reader'],
   },
 }
 

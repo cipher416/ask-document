@@ -11,7 +11,7 @@ import { tmpdir } from 'os';
 import { authOptions } from "@/lib/options";
 
 export async function POST(request: Request) {
-    const pdfjs = await import("pdfjs-dist/legacy/build/pdf.js");
+  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.js");
   pdfjs.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.550/pdf.worker.js";
   const session = await getServerSession(authOptions);
   const formData = await request.formData();
