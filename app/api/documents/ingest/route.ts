@@ -1,5 +1,4 @@
 import { getServerSession } from "next-auth"
-import { authOptions } from "../../auth/[...nextauth]/route"
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { Document } from "langchain/document";
 import { OpenAIEmbeddings } from "@langchain/openai";
@@ -10,6 +9,7 @@ import { promises as fs } from 'fs';
 import {readPdfText} from 'pdf-text-reader';
 import {  createClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
+import { authOptions } from "@/lib/options";
 export async function POST(request: Request) {
   
   const session = await getServerSession(authOptions);
