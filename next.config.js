@@ -11,6 +11,7 @@ const nextConfig = {
   },
   experimental: {
     serverComponentsExternalPackages: ['pdf-text-reader'],
+    outputFileTracingIgnores: ['**canvas**'],
   },
 }
 
