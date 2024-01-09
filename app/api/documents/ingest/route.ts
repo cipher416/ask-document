@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth"
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
-import { Document } from "langchain/document";
+import { Document } from "@langchain/core/documents";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import prisma from "@/lib/db";
 
@@ -8,24 +8,20 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
 import {readPdfText}from 'pdf-text-reader';
-
 import {  createClient } from "@supabase/supabase-js";
 import { tmpdir } from 'os';
 import { authOptions } from "@/lib/options";
 export async function POST(request: Request) {
   const pdfjs = await import("pdfjs-dist/legacy/build/pdf.js");
-  pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/legacy/build/pdf.worker.js',import.meta.url,).toString();
+  pdfjs.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.550/pdf.worker.js";
   const session = await getServerSession(authOptions);
 	console.log(session);
   const formData = await request.formData();
   const file = formData.get("file");
 	const fileName = formData.get("fileName")!.toString();
   if (file instanceof Blob){
-    // Convert the uploaded file into a temporary file
     const tempFilePath = `${tmpdir}/${uuidv4()}.pdf`;
-    // Convert ArrayBuffer to Buffer
     const fileBuffer = Buffer.from(await file.arrayBuffer());
-    // Save the buffer as a file
     await fs.writeFile(tempFilePath, fileBuffer);
 		const text = await readPdfText({url: tempFilePath});
 		const userDocument = await prisma.userDocuments.create({
