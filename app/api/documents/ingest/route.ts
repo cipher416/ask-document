@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
 import {readPdfText} from 'pdf-text-reader';
 import {  createClient } from "@supabase/supabase-js";
-import { redirect } from "next/navigation";
+import { tmpdir } from 'os';
 import { authOptions } from "@/lib/options";
 export async function POST(request: Request) {
   
@@ -18,9 +18,8 @@ export async function POST(request: Request) {
   const file = formData.get("file");
 	const fileName = formData.get("fileName")!.toString();
   if (file instanceof Blob){
-
     // Convert the uploaded file into a temporary file
-    const tempFilePath = `./tmp/${uuidv4()}.pdf`;
+    const tempFilePath = `${tmpdir}/${uuidv4()}.pdf`;
     // Convert ArrayBuffer to Buffer
     const fileBuffer = Buffer.from(await file.arrayBuffer());
     // Save the buffer as a file
@@ -55,6 +54,7 @@ export async function POST(request: Request) {
         queryName: "match_documents",
       },
     );
+    await fs.rm(tempFilePath);
 
 		return Response.json({
       documentId: userDocument.id
