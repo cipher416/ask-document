@@ -10,7 +10,7 @@ const nextConfig = {
     ],
   },
   experimental: {
-    serverComponentsExternalPackages: ['pdf-text-reader'],
+    serverComponentsExternalPackages: ['pdfjs-dist'],
     outputFileTracingIgnores: ['**canvas**'],
   },
 }
