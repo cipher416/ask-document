@@ -3,10 +3,9 @@
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "./navigation-menu";
 import Profile from "./profile";
 import React, { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./select";
 import DocumentService from "@/services/DocumentService";
-import { UserDocuments } from "@prisma/client";
+import { UserDocuments } from "@/prisma/generated/client";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 

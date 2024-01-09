@@ -1,6 +1,6 @@
 
 import { FormInputData } from "@/types/types";
-import { UserDocuments } from "@prisma/client";
+import { UserDocuments } from "@/prisma/generated/client";
 import { getServerSession } from "next-auth";
 
 
