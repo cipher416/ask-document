@@ -11,7 +11,7 @@ const nextConfig = {
   },
   experimental: {
     serverComponentsExternalPackages: ['@langchain/core','pdf-text-reader'],
-  }
+  },
 }
 
 module.exports = nextConfig

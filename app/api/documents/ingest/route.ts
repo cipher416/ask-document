@@ -3,15 +3,17 @@ import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase"
 import { Document } from "langchain/document";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import prisma from "@/lib/db";
+
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
-import {readPdfText} from 'pdf-text-reader';
+import {readPdfText}from 'pdf-text-reader';
+import PDFjs from 'pdfjs-dist'
 import {  createClient } from "@supabase/supabase-js";
 import { tmpdir } from 'os';
 import { authOptions } from "@/lib/options";
 export async function POST(request: Request) {
-  
+  PDFjs.GlobalWorkerOptions.workerSrc = './pdf.worker.js'
   const session = await getServerSession(authOptions);
 	console.log(session);
   const formData = await request.formData();
