@@ -8,12 +8,13 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
 import {readPdfText}from 'pdf-text-reader';
-import * as PDFjs from 'pdfjs-dist'
+
 import {  createClient } from "@supabase/supabase-js";
 import { tmpdir } from 'os';
 import { authOptions } from "@/lib/options";
 export async function POST(request: Request) {
-  PDFjs.GlobalWorkerOptions.workerSrc = './pdf.worker.js'
+  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.js");
+  pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/legacy/build/pdf.worker.js',import.meta.url,).toString();
   const session = await getServerSession(authOptions);
 	console.log(session);
   const formData = await request.formData();
