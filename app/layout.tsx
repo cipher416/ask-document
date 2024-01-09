@@ -16,8 +16,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.js");
-  pdfjs.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.550/pdf.worker.js";
   return (
     <html lang="en">
       <AuthProvider>
