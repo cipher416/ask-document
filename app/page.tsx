@@ -3,13 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import DocumentService from "@/services/DocumentService";
 import { FormInputData } from "@/types/types";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { Controller, useForm } from "react-hook-form";
+import {  useForm } from "react-hook-form";
 
 export default function Home() {
   const router = useRouter();

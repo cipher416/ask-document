@@ -11,7 +11,6 @@ const nextConfig = {
   },
   experimental: {
     serverComponentsExternalPackages: ['pdfjs-dist'],
-    outputFileTracingIgnores: ['**canvas**'],
   },
 }
 
