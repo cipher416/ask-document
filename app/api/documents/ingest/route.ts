@@ -5,7 +5,6 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 import prisma from "@/lib/db";
 
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { v4 as uuidv4 } from 'uuid';
 import { promises as fs } from 'fs';
 import {readPdfText}from 'pdf-text-reader';
 import {  createClient } from "@supabase/supabase-js";
@@ -20,7 +19,7 @@ export async function POST(request: Request) {
   const file = formData.get("file");
 	const fileName = formData.get("fileName")!.toString();
   if (file instanceof Blob){
-    const tempFilePath = `${tmpdir}/${uuidv4()}.pdf`;
+    const tempFilePath = `${tmpdir}/temp.pdf`;
     const fileBuffer = Buffer.from(await file.arrayBuffer());
     await fs.writeFile(tempFilePath, fileBuffer);
 		const text = await readPdfText({url: tempFilePath});
