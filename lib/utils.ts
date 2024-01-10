@@ -6,12 +6,17 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export async function getTextFromPDF(path: string) {
-  const pdfjs = await import('pdfjs-dist')
+  const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
   let doc = await pdfjs.getDocument(path).promise;
-  let page1 = await doc.getPage(1);
-  let content = await page1.getTextContent();
-  let strings = content.items.map(function(item: any) {
-      return item.str;
-  });
-  return strings.join(" ");
+  let pages = doc.numPages;
+  let pageContents = '';
+  for (let i = 0; i < pages; i++) {
+    let page1 = await doc.getPage(i + 1);
+    let content = await page1.getTextContent();
+    let strings = content.items.map(function(item: any) {
+        return item.str;
+    });
+    pageContents += strings.join(" ");
+  }
+  return pageContents;
 }
