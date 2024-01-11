@@ -11,15 +11,18 @@ import { useSession } from "next-auth/react";
 
 function DocumentDropdownData() {
   const [documents, setDocuments] = useState<UserDocuments[]>([]);
-  useEffect(()=> {
-    DocumentService.getAllDocuments().then((results)=> {
+  DocumentService.getAllDocuments().then((results)=> {
       setDocuments(results);
-    });
-  }, [])
+  });
+
   return (
-    documents.length != 0 ? documents.map((document)=> {
+    <SelectContent>
+      <SelectGroup>
+    {documents.length != 0 ? documents.map((document)=> {
       return <SelectItem value={document.id} key={document.id}>{document.name}</SelectItem>
-    }) : <></>
+    }) : <></>}
+      </SelectGroup>
+    </SelectContent>
   );
 }
 
@@ -42,11 +45,7 @@ export default function Navbar() {
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select a document" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
                 <DocumentDropdownData/>
-              </SelectGroup>
-            </SelectContent>
           </Select> : <></>
         }
         
