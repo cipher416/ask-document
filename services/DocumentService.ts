@@ -22,4 +22,8 @@ export default class DocumentService {
     });
     return (await result.json()).documentId;
   }
+
+  static async getDocument(id: string): Promise<UserDocuments> {
+    return await (await fetch(`/api/documents/${id}`)).json();
+  }
 }

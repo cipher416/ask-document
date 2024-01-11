@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import DocumentService from "@/services/DocumentService";
 import { FormInputData, FormSendData } from "@/types/types";
 import { useSession } from "next-auth/react";
@@ -12,6 +13,7 @@ import {  useForm } from "react-hook-form";
 
 export default function Home() {
   const router = useRouter();
+  const {toast} = useToast();
   const {status} = useSession();
   const form = useForm<FormInputData>();
 
@@ -21,6 +23,7 @@ export default function Home() {
     const reader = new FileReader();
 
     reader.onload = async (e) => {
+      toast({description:"Sending data to server...."})
       const contents = e.target!.result;
       const pdf = await pdfjs.getDocument(contents as ArrayBuffer).promise;
       const pages = pdf.numPages;
@@ -39,6 +42,7 @@ export default function Home() {
         fileName: values.fileName
       } satisfies FormSendData
       const result = await DocumentService.ingestDocument(a);
+      toast({description: "Success!"})
       router.push(`/${result}`);
     }
     reader.readAsArrayBuffer(values.file);

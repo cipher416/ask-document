@@ -11,9 +11,11 @@ import { useSession } from "next-auth/react";
 
 function DocumentDropdownData() {
   const [documents, setDocuments] = useState<UserDocuments[]>([]);
-  DocumentService.getAllDocuments().then((results)=> {
+  useEffect(()=> {
+    DocumentService.getAllDocuments().then((results)=> {
       setDocuments(results);
-  });
+    });
+  }, [])
 
   return (
     <SelectContent>
@@ -29,12 +31,13 @@ function DocumentDropdownData() {
 export default function Navbar() {
   const router = useRouter();
   const {status} = useSession();
+
   return (
     <div className="flex flex-row justify-between p-5 mx-10 h-fit">
       <div className="flex space-x-10 items-center">
         <h1 className="font-extrabold">
           <a href="/">
-            ask-document
+            ask-document 
           </a>
         </h1>
         {
