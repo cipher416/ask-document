@@ -9,7 +9,7 @@ import ChatService from '@/services/ChatService';
 import {Message} from 'ai/react'
 import { useEffect, useState } from 'react';
 import DocumentService from '@/services/DocumentService';
-import { UserDocuments } from '@prisma/client';
+import { UserDocuments } from '@/prisma/generated/client';
 
 export default function Chat({ params }: { params: { id: string } }) {
   const [document, setDocument] = useState<UserDocuments>();
