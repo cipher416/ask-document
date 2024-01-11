@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import DocumentService from "@/services/DocumentService";
-import { FormInputData } from "@/types/types";
+import { FormInputData, FormSendData } from "@/types/types";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {  useForm } from "react-hook-form";
+
 
 export default function Home() {
   const router = useRouter();
@@ -15,8 +16,32 @@ export default function Home() {
   const form = useForm<FormInputData>();
 
   async function onSubmit(values:FormInputData) {
-    const result = await DocumentService.ingestDocument(values);
-    router.push(`/${result}`);
+    const pdfjs = await import("pdfjs-dist");
+    pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs";
+    const reader = new FileReader();
+
+    reader.onload = async (e) => {
+      const contents = e.target!.result;
+      const pdf = await pdfjs.getDocument(contents as ArrayBuffer).promise;
+      const pages = pdf.numPages;
+      let pageContents = '';
+      for (let i = 0; i < pages; i++) {
+        let page1 = await pdf.getPage(i + 1);
+        let content = await page1.getTextContent();
+        let strings = content.items.map(function(item: any) {
+            return item.str;
+        });
+        pageContents += strings.join(" ");
+      }
+      console.log(pageContents);
+      const a = {
+        file: pageContents,
+        fileName: values.fileName
+      } satisfies FormSendData
+      const result = await DocumentService.ingestDocument(a);
+      router.push(`/${result}`);
+    }
+    reader.readAsArrayBuffer(values.file);
   }
 
   return (
