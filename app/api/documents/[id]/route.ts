@@ -7,6 +7,5 @@ export async function GET(request: Request, { params }: { params: { id: string }
       id: documentId
     }, 
   });
-  console.log(document);
   return Response.json(document);
 }

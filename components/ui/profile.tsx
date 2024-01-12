@@ -5,7 +5,6 @@ import { Skeleton } from "./skeleton";
 
 export default function Profile() {
   const {data, status} = useSession();
-  console.log(status)
   switch (status) {
     case 'authenticated':
       return (

@@ -70,11 +70,9 @@ async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const body = await req.json();
     const messages = body.messages ?? [];
-    console.log(params)
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
     const prompt = PromptTemplate.fromTemplate(questionPrompt);
-    console.log('test',formatVercelMessages(formattedPreviousMessages));
     const client = createClient(
 			process.env.SUPABASE_URL!,
       process.env.SUPABASE_PRIVATE_KEY!,
@@ -110,7 +108,6 @@ async function POST(req: NextRequest, { params }: { params: { id: string } }) {
       model,
       new StringOutputParser(),
     ]);
-    console.log(typeof currentMessageContent);
     const response = await chain.invoke({question:currentMessageContent, chatHistory: formatVercelMessages(formattedPreviousMessages)});
     await prisma.chat.createMany({
       data: [

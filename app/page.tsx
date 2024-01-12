@@ -36,7 +36,6 @@ export default function Home() {
         });
         pageContents += strings.join(" ");
       }
-      console.log(pageContents);
       const a = {
         file: pageContents,
         fileName: values.fileName
