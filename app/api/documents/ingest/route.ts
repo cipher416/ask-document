@@ -7,7 +7,8 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { createClient } from "@supabase/supabase-js";
 import { authOptions } from "@/lib/options";
 
-
+export const maxDuration = 300; // This function can run for a maximum of 5 seconds
+export const dynamic = 'force-dynamic';
 export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
     const formData = await request.formData();
