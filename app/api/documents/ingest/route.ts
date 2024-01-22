@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     }).select();
 		const splitter = RecursiveCharacterTextSplitter.fromLanguage("markdown", {
       chunkSize: 2000,
-      chunkOverlap: 100,
+      chunkOverlap: 200,
     });
 
 		let splitDocuments = await splitter.splitDocuments([new Document({ pageContent: file as string ,metadata:{
@@ -41,6 +41,7 @@ export async function POST(request: Request) {
         client: supabaseClient,
         tableName: "document",
         queryName: "match_documents",
+        upsertBatchSize: 100
       },
     );
     console.log('------3-------')
