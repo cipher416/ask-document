@@ -7,11 +7,10 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { createClient } from "@supabase/supabase-js";
 import { authOptions } from "@/lib/options";
 
-export const maxDuration = 300; // This function can run for a maximum of 5 seconds
-export const dynamic = 'force-dynamic';
 export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
     const formData = await request.formData();
+    console.log('------1-------')
     const file = formData.get("file");
     const fileName = formData.get("fileName");
     const newDocumentId = createId();
@@ -25,7 +24,7 @@ export async function POST(request: Request) {
       userId: session!.user.id
     }).select();
 		const splitter = RecursiveCharacterTextSplitter.fromLanguage("markdown", {
-      chunkSize: 1000,
+      chunkSize: 2000,
       chunkOverlap: 100,
     });
 
@@ -34,7 +33,7 @@ export async function POST(request: Request) {
 			documentId: data![0].id,
 			documentName : fileName,
 		}}),]);
-
+    console.log('------2-------')
 		const vectorstore = await SupabaseVectorStore.fromDocuments(
       splitDocuments,
       new OpenAIEmbeddings(),
@@ -44,7 +43,7 @@ export async function POST(request: Request) {
         queryName: "match_documents",
       },
     );
-
+    console.log('------3-------')
 		return Response.json({
       documentId: newDocumentId
     });
