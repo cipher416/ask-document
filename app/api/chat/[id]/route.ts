@@ -122,7 +122,7 @@ async function POST(req: NextRequest, { params }: { params: { id: string } }) {
           content: response,
         }
       ]
-    });
+    }); 
     return Response.json(response);
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });

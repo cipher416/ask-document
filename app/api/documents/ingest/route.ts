@@ -7,10 +7,10 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { createClient } from "@supabase/supabase-js";
 import { authOptions } from "@/lib/options";
 
+
 export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
     const formData = await request.formData();
-    console.log('------1-------')
     const file = formData.get("file");
     const fileName = formData.get("fileName");
     const newDocumentId = createId();
@@ -33,8 +33,7 @@ export async function POST(request: Request) {
 			documentId: data![0].id,
 			documentName : fileName,
 		}}),]);
-    console.log('------2-------')
-		const vectorstore = await SupabaseVectorStore.fromDocuments(
+		const vectorstore = SupabaseVectorStore.fromDocuments(
       splitDocuments,
       new OpenAIEmbeddings(),
       {
@@ -44,7 +43,6 @@ export async function POST(request: Request) {
         upsertBatchSize: 100
       },
     );
-    console.log('------3-------')
 		return Response.json({
       documentId: newDocumentId
     });
