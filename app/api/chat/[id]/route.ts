@@ -74,13 +74,15 @@ async function POST(req: NextRequest, { params }: { params: { id: string } }) {
     const currentMessageContent = messages[messages.length - 1].content;
     const prompt = PromptTemplate.fromTemplate(questionPrompt);
     const client = createClient(
-			process.env.SUPABASE_URL!,
-      process.env.SUPABASE_PRIVATE_KEY!,
+			process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_PRIVATE_KEY!,
 		);
     const funcFilter: SupabaseFilterRPCCall = (rpc) =>
     rpc
       .filter("metadata->>documentId", "eq", params.id);
-    const vectorStore = await SupabaseVectorStore.fromExistingIndex(new OpenAIEmbeddings(), {
+    const vectorStore = await SupabaseVectorStore.fromExistingIndex(new OpenAIEmbeddings({
+      openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY!
+    }), {
       client,
       tableName: "document",
       queryName: "match_documents",
@@ -90,8 +92,9 @@ async function POST(req: NextRequest, { params }: { params: { id: string } }) {
     const model = new ChatOpenAI({
       modelName: "gpt-3.5-turbo-1106",
       temperature: 0.2,
+      openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY!
     });
-    const retriever = vectorStore.asRetriever(4);
+    const retriever = vectorStore.asRetriever(20);
     const chain = RunnableSequence.from([
       {
         question: (input: { question: string; chatHistory?: string }) =>

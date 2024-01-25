@@ -14,10 +14,10 @@ import {  useForm } from "react-hook-form";
 export default function Home() {
   const router = useRouter();
   const {toast} = useToast();
-  const {status} = useSession();
+  const {status, data} = useSession();
   const form = useForm<FormInputData>();
 
-  async function onSubmit(values:FormInputData) {
+  async function onSubmit(values:FormData) {
     const pdfjs = await import("pdfjs-dist");
     pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs";
     const reader = new FileReader();
@@ -36,21 +36,19 @@ export default function Home() {
         });
         pageContents += strings.join(" ");
       }
-      const a = {
-        file: pageContents,
-        fileName: values.fileName
-      } satisfies FormSendData
-      const result = await DocumentService.ingestDocument(a);
+      values.set('file', pageContents);
+      values.append('userId', data?.user.id as string);
+      const result = await DocumentService.ingestDocument(values);
       toast({description: "Success!"})
       router.push(`/${result}`);
     }
-    reader.readAsArrayBuffer(values.file);
+    reader.readAsArrayBuffer(values.get('file') as File);
   }
 
   return (
     <div className='grid content-center'>
       <Form {...form}>
-        <form className="m-20 flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="m-20 flex flex-col space-y-6" action={onSubmit}>
           <FormField
           name="fileName"
           control={form.control}
